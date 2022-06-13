@@ -12,7 +12,7 @@ const RecipeCard = ({ recipe }) => {
 				alt={recipe?.thumbnail_alt_text}
 			/>
 			<div className="card__body">
-				<p>{dayjs(new Date(recipe?.created_at)).format("DD/MM/YYYY")}</p>
+				<p>{dayjs(new Date(recipe?.created_at)).format("DD-MM-YYYY")}</p>
 				<h3>{recipe?.name}</h3>
 				{/* <p>{recipe.description}</p> */}
 			</div>
