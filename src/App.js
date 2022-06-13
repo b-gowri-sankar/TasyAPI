@@ -10,16 +10,17 @@ function App() {
 	const [pageNumber, setPageNumber] = React.useState(1);
 
 	React.useEffect(() => {
+		// eslint-disable-next-line
 		fetchData();
 	}, [pageNumber]);
 
 	const fetchData = async () => {
 		const options = {
 			method: "GET",
-			url: "https://tasty.p.rapidapi.com/recipes/list",
+			url: `${process.env.REACT_APP_ENDPOINT}recipes/list`,
 			params: { from: (pageNumber - 1) * 20, size: "20", q: searchText },
 			headers: {
-				"X-RapidAPI-Key": "7c21e2ef7bmshf12585d1c36be29p19e5b5jsn7e9c8353f41d",
+				"X-RapidAPI-Key": process.env.REACT_APP_API_KEY,
 				"X-RapidAPI-Host": "tasty.p.rapidapi.com",
 			},
 		};
@@ -64,6 +65,17 @@ function App() {
 			)}
 
 			<div className="pagination__container">
+				<div>
+					{pageNumber !== 1 && (
+						<button
+							onClick={() => {
+								setPageNumber(1);
+							}}
+						>
+							First Page
+						</button>
+					)}
+				</div>
 				<div className="pagination">
 					{pageNumber !== 1 && (
 						<button
@@ -75,16 +87,18 @@ function App() {
 						</button>
 					)}
 					<button>{pageNumber}</button>
-					<button
-						onClick={() => {
-							setPageNumber((pageNumber) => pageNumber + 1);
-						}}
-					>
-						Next
-					</button>
+					{Math.ceil(recipes?.count / 20) !== pageNumber && (
+						<button
+							onClick={() => {
+								setPageNumber((pageNumber) => pageNumber + 1);
+							}}
+						>
+							Next
+						</button>
+					)}
 				</div>
 				<div>
-					{pageNumber === 1 && recipes?.count && (
+					{Math.ceil(recipes?.count / 20) !== pageNumber && recipes?.count && (
 						<button
 							onClick={() => {
 								setPageNumber(Math.ceil(recipes?.count / 20));
